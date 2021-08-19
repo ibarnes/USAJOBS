@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Fetch API Data
+        # You may pin to the exact commit or the version.
+        # uses: JamesIves/fetch-api-data-action@adad3a6c1fb06f64e97e243a459e869836d612e5
+        uses: JamesIves/fetch-api-data-action@1.0.19
+        with:
+            # The URL of the endpoint you would like to retrieve data from.
+            ENDPOINT: https://data.usajobs.gov/api/Search
+            # Any applicable configuration settings that should be set such as authentication tokens. You can reference secrets using the secrets syntax, or you can reference data returned from the `TOKEN_ENDPOINT` request using the triple bracket syntax.
+            CONFIGURATION: '{ "method": "GET", "headers": {Accept: "application/hr+json; charset=utf-8","Content-Type": "text/json; charset=utf-8",Host: "data.usajobs.gov", "User-Agent": "david.k.williams3.civ@mail.mil","Authorization-Key": "/LeOElJYi8geSFrWkHOv6veTTbprPoJzIbv3l75KNK0="} }'
+            # By default the save location of the JSON file is `fetch-api-data-action/data.json`, if you would like to override the directory you can do so by specifying a new one with this variable.
+            #SAVE_LOCATION: # optional
+            # You can override the name of the exported `.json` file by specifying a new one here. You should _not_ include the file extension in your name.
+            SAVE_NAME: usajobs_dod_data
